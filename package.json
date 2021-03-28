@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-timelapse-from-recordings",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "main": "index.js",
   "repository": {
@@ -15,7 +15,8 @@
   "homepage": "https://github.com/bjm904/node-red-contrib-timelapse-from-recordings#readme",
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.20",
-    "ffmpeg": "0.0.4"
+    "ffmpeg": "0.0.4",
+    "glob": "^7.1.6"
   },
   "keywords": [
     "node-red",
@@ -24,7 +25,7 @@
   ],
   "node-red": {
     "nodes": {
-        "timelapse-from-recordings": "src/timelapse-from-recordings.js"
+      "timelapse-from-recordings": "src/timelapse-from-recordings.js"
     }
   }
 }

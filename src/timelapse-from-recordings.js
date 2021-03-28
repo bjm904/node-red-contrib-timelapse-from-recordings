@@ -1,5 +1,7 @@
-module.exports = function(RED) {
-  function TimelapseFromRecordingsNode(config) {
+const listAllVideoFilesInDirectory = require('./lib/listAllVideoFilesInDirectory');
+
+module.exports = (RED) => {
+  const TimelapseFromRecordingsNode = (config) => {
     RED.nodes.createNode(this, config);
     const node = this;
     const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
@@ -11,22 +13,26 @@ module.exports = function(RED) {
       text: 'Ready',
     });
 
-    node.on('input', function(msg, send, done) {
+    node.on('input', (msg, send, done) => {
+      const files = listAllVideoFilesInDirectory(msg.directory);
+
+      node.warn(files);
+
       const ffmpeg = spawn(ffmpegPath, []);
    
-      ffmpeg.stdout.on('data', function(data) {
+      ffmpeg.stdout.on('data', (data) => {
           node.warn(`stdout: ${data}`);
       });
 
-      ffmpeg.stderr.on('data', function(data) {
+      ffmpeg.stderr.on('data', (data) => {
           node.error(`stderr: ${data}`);
       });
 
-      ffmpeg.on('error', function(error) {
+      ffmpeg.on('error', (error) => {
           node.error(`error: ${error.message}`);
       });
 
-      ffmpeg.on('exit', function(code) {
+      ffmpeg.on('exit', (code) => {
           node.warn(`child process exited with code ${code}`);
           return msg;
       });
@@ -36,10 +42,10 @@ module.exports = function(RED) {
       done();
     });
 
-    node.on('close', function() {
+    node.on('close', () => {
       
     });
-  }
+  };
 
   RED.nodes.registerType('timelapse-from-recordings', TimelapseFromRecordingsNode);
 }
