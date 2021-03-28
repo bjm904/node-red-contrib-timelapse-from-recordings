@@ -1,0 +1,25 @@
+{
+  "name": "red-contrib-timelapse-from-recordings",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bjm904/node-red-contrib-timelapse-from-recordings.git"
+  },
+  "author": "Bryce Meyer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bjm904/node-red-contrib-timelapse-from-recordings/issues"
+  },
+  "homepage": "https://github.com/bjm904/node-red-contrib-timelapse-from-recordings#readme",
+  "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.0.20",
+    "ffmpeg": "0.0.4"
+  },
+  "keywords": [
+    "node-red",
+    "ffmpeg",
+    "timelapse"
+  ]
+}
