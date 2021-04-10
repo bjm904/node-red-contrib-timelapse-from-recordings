@@ -10,3 +10,7 @@ Inputs
 Outputs GIFs
 
 Limitations
+
+TODO:
+- Add ability to specify file extentions to filter like .mp4 or .mkv
+- 

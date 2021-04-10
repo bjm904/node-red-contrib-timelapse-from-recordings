@@ -16,7 +16,8 @@
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.20",
     "ffmpeg": "0.0.4",
-    "glob": "^7.1.6"
+    "glob": "^7.1.6",
+    "rimraf": "^3.0.2"
   },
   "keywords": [
     "node-red",
