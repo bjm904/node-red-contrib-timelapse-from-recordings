@@ -3,6 +3,7 @@ const os = require('os');
 const path = require('path');
 const rimraf = require('rimraf');
 const extractFramesForCamera = require('./lib/extractFramesForCamera');
+const generateGif = require('./lib/generateGifForCamera');
 const interpretFileInfoFromPath = require('./lib/interpretFileInfoFromPath');
 const listAllVideoFilesInDirectory = require('./lib/listAllVideoFilesInDirectory');
 
@@ -10,9 +11,10 @@ module.exports = function(RED) {
   function TimelapseFromRecordingsNode(config) {
     RED.nodes.createNode(this, config);
     const node = this;
+    node.debug = node.warn;
 
     // nrctfr = node-red-contrib-timelapse-from-recordings
-    const tmpDirectory = path.join(os.tmpdir(), 'nrctfr');
+    //const tmpDirectory = path.join(os.tmpdir(), 'nrctfr');
 
     node.status({
       fill: 'green',
@@ -21,18 +23,17 @@ module.exports = function(RED) {
     });
 
     node.on('input', (msg, send, done) => {
+      const tmpDirectory = path.join(msg.outputDirectory, 'nrctfr');
       // Recreate tmp directory
-      node.debug(`Using tmp directory ${tmpDirectory}`);
       node.status({
         fill: 'yellow',
         shape: 'ring',
-        text: `Getting tmp directory ready ${tmpDirectory}`,
+        text: `Cleaning tmp directory ${tmpDirectory}`,
       });
       rimraf.sync(tmpDirectory);
       fs.mkdirSync(tmpDirectory, {recursive: true});
 
       // List all files
-      node.debug(`Looking in recordings directory ${msg.recordingsDirectory}`);
       node.status({
         fill: 'yellow',
         shape: 'ring',
@@ -40,7 +41,6 @@ module.exports = function(RED) {
       });
       listAllVideoFilesInDirectory(msg.recordingsDirectory).then((fileNames) => {
         // Parse all file names for camera and date
-        node.debug(`Found ${fileNames.length} files to process`);
         node.status({
           fill: 'yellow',
           shape: 'ring',
@@ -64,33 +64,53 @@ module.exports = function(RED) {
 
         // Count the cameras
         const cameraNames = Object.keys(fileInfosByCamera);
+        cameraNames.splice(1);
         node.status({
           fill: 'yellow',
           shape: 'ring',
           text: `Found ${cameraNames.length} cameras`,
         });
         
-        // Process recordings one camera at a time
-        const promises = cameraNames.map((camera) => (
-          extractFramesForCamera(tmpDirectory, camera, fileInfosByCamera[camera])
+        // Extract frames from recordings
+        const promisesExtract = cameraNames.map((camera) => (
+          extractFramesForCamera(node, tmpDirectory, camera, fileInfosByCamera[camera])
         ));
 
-        node.status({
-          fill: 'yellow',
-          shape: 'ring',
-          text: 'Grabbing frames...',
-        });
+        const statusUpdateInterval = setInterval(() => {
+          const fileInfosDone = fileInfos.filter(f => f.done);
+          node.status({
+            fill: 'yellow',
+            shape: 'ring',
+            text: `Extracting frames. Finished ${fileInfosDone.length} of ${fileInfos.length}`,
+          });
+        }, 200);
 
-        Promise.all(promises).catch((err) =>{
+        Promise.all(promisesExtract).catch((err) =>{
           node.error(err, msg);
         }).finally(() => {
+          clearInterval(statusUpdateInterval);
+
           node.status({
-            fill: 'green',
-            shape: 'dot',
-            text: 'Done',
+            fill: 'yellow',
+            shape: 'ring',
+            text: `Generating GIFs for ${cameraNames.length} cameras`,
           });
-          send(msg);
-          done();
+
+          const promisesGenerate = cameraNames.map((camera) => (
+            generateGifForCamera(node, tmpDirectory, camera)
+          ));
+
+          Promise.all(promisesGenerate).catch((err) =>{
+            node.error(err, msg);
+          }).finally(() => {
+            node.status({
+              fill: 'green',
+              shape: 'dot',
+              text: 'Done',
+            });
+            send(msg);
+            done();
+          });
         });
       }).catch((err) => {
         node.error(err, msg);
