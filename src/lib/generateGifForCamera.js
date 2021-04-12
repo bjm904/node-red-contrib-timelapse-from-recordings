@@ -1,7 +1,6 @@
 const {execFile} = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const gifsicle = require('gifsicle');
 
 const generateGifForCamera = (node, tmpDirectory) => new Promise((resolve, reject) => {
   const tmpCamDirectory = path.join(tmpDirectory, camera);
@@ -9,7 +8,7 @@ const generateGifForCamera = (node, tmpDirectory) => new Promise((resolve, rejec
   const outputPath = path.join(tmpCamDirectory, 'output.gif');
   
   node.debug(`Creating gif ${outputPath}`);
-  execFile(gifsicle, ['-o', outputPath, inputFilesPath], (err) => {
+  execFile('../bin/gifsicle', ['-o', outputPath, inputFilesPath], (err) => {
     if (err) {
       reject(err);
     } else {

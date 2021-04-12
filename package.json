@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-timelapse-from-recordings",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "",
   "main": "index.js",
   "repository": {
@@ -16,7 +16,6 @@
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.20",
     "ffmpeg": "0.0.4",
-    "gifsicle": "^5.2.0",
     "glob": "^7.1.6",
     "rimraf": "^3.0.2"
   },
