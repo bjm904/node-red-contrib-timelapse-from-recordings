@@ -3,7 +3,7 @@ const os = require('os');
 const path = require('path');
 const rimraf = require('rimraf');
 const extractFramesForCamera = require('./lib/extractFramesForCamera');
-const generateGif = require('./lib/generateGifForCamera');
+const generateGifForCamera = require('./lib/generateGifForCamera');
 const interpretFileInfoFromPath = require('./lib/interpretFileInfoFromPath');
 const listAllVideoFilesInDirectory = require('./lib/listAllVideoFilesInDirectory');
 
@@ -64,7 +64,9 @@ module.exports = function(RED) {
 
         // Count the cameras
         const cameraNames = Object.keys(fileInfosByCamera);
-        cameraNames.splice(1);
+
+        cameraNames.splice(1); // REMOVE THIS
+
         node.status({
           fill: 'yellow',
           shape: 'ring',
@@ -83,7 +85,7 @@ module.exports = function(RED) {
             shape: 'ring',
             text: `Extracting frames. Finished ${fileInfosDone.length} of ${fileInfos.length}`,
           });
-        }, 200);
+        }, 1000);
 
         Promise.all(promisesExtract).catch((err) =>{
           node.error(err, msg);

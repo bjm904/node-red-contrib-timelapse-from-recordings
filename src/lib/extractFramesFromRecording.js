@@ -22,7 +22,7 @@ const extractFramesFromRecording = (node, tmpCamDirectory, fileInfo) => new Prom
   const ffmpeg = spawn(ffmpegPath, ffmpegArgs);
 
   ffmpeg.on('error', (err) => {
-    node.warn(data);
+    node.warn(err);
   });
 
   ffmpeg.on('exit', (code) => {

@@ -1,5 +1,7 @@
 # Node Red Timelapse from Recordings
 
+# WORK IN PROGRESS CHECK BACK May 1, 2021
+
 This node will scan a directory of video files and produce a timelapse GIF based on parameters.
 
 
