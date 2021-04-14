@@ -6,7 +6,7 @@ const secsBetweenFrames = 1 * 60 * 60; // 1 hr
 
 const extractFramesFromRecording = (node, tmpCamDirectory, fileInfo) => new Promise((resolve, reject) => {
   const inputPath = `${fileInfo.fileName}`;
-  const outputPath = `${path.join(tmpCamDirectory, `${fileInfo.timestamp}.jpg`)}`;
+  const outputPath = `${path.join(tmpCamDirectory, `${fileInfo.timestamp}.png`)}`;
 
   const ffmpegArgs = [
     '-hide_banner',
@@ -15,7 +15,7 @@ const extractFramesFromRecording = (node, tmpCamDirectory, fileInfo) => new Prom
     //'-ss', '00:00:01.000',
     //'-vf', `fps=1/${secsBetweenFrames}`,
     '-vframes', '1',
-    '-q:v', '3', // JPG quality 2-31. Lower is better.
+    '-q:v', '3', // PNG quality 2-31. Lower is better.
     outputPath,
   ];
 

@@ -16,7 +16,9 @@
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.20",
     "ffmpeg": "0.0.4",
+    "gifencoder": "^2.0.1",
     "glob": "^7.1.6",
+    "png-file-stream": "^1.2.1",
     "rimraf": "^3.0.2"
   },
   "keywords": [
