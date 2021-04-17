@@ -4,7 +4,7 @@ const glob = require('glob');
 const globOptions = {
   nodir: true,
   //nosort: true,
-  stat: true,
+  //stat: true,
 };
 
 const listAllVideoFilesInDirectory = (directory) => new Promise((resolve, reject) => {

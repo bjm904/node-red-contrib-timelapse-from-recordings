@@ -1,22 +1,24 @@
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+const fs = require('fs');
 const path = require('path');
 const spawn = require('child_process').spawn;
-const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
 
 const secsBetweenFrames = 1 * 60 * 60; // 1 hr
 
 const extractFramesFromRecording = (node, tmpCamDirectory, fileInfo) => new Promise((resolve, reject) => {
   const inputPath = `${fileInfo.fileName}`;
-  const outputPath = `${path.join(tmpCamDirectory, `${fileInfo.timestamp}.png`)}`;
+  const outputPath = `${path.join(tmpCamDirectory, `${fileInfo.timestamp}.jpg`)}`;
 
   const ffmpegArgs = [
-    '-hide_banner',
-    '-i', inputPath,
-    '-an',
-    //'-ss', '00:00:01.000',
-    //'-vf', `fps=1/${secsBetweenFrames}`,
-    '-vframes', '1',
-    '-q:v', '3', // PNG quality 2-31. Lower is better.
-    outputPath,
+    '-hide_banner',               // Reduce console output
+    '-y',                         // Overwrite output file if exists
+    '-err_detect', 'aggressive',
+    '-fflags', 'discardcorrupt',
+    '-i', inputPath,              // Input files glob
+    '-an',                        // Audio none
+    '-vframes', '1',              // One frame per file
+    '-q:v', '2',                  // JPG quality 2-31. Lower is better.
+    outputPath,                   // Output files
   ];
 
   const ffmpeg = spawn(ffmpegPath, ffmpegArgs);
@@ -30,6 +32,11 @@ const extractFramesFromRecording = (node, tmpCamDirectory, fileInfo) => new Prom
       fileInfo.done = true;
       resolve();
     } else {
+      try {
+        // Delete any potentially corrupt output
+        fs.unlinkSync(outputPath, { force: true });
+      } catch (err) {
+      }
       reject(`ffmpeg exited with code ${code}`);
     }
   });

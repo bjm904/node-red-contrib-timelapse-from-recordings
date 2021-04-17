@@ -2,8 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const extractFramesFromRecording = require('./extractFramesFromRecording');
 
-const threadsPerCamera = 10;
-
 const processNextRecording = (node, tmpCamDirectory, fileInfos, resolveCamera, i = 0) => {
   const fileInfo = fileInfos[i];
   if (fileInfo) {
@@ -21,9 +19,7 @@ const startProcessingThread = (node, tmpCamDirectory, fileInfos = []) => new Pro
   processNextRecording(node, tmpCamDirectory, fileInfos, resolve, 0);
 });
 
-const extractFramesForCamera = (node, tmpDirectory, camera, fileInfos = []) => new Promise((resolve, reject) => {
-  fileInfos.length = 100;
-
+const extractFramesForCamera = (node, tmpDirectory, threadsPerCamera, camera, fileInfos = []) => new Promise((resolve, reject) => {
   const tmpCamDirectory = path.join(tmpDirectory, camera);
   node.debug(`Creating tmpCamDirectory ${tmpCamDirectory}`);
   fs.mkdirSync(tmpCamDirectory, {recursive: true});
