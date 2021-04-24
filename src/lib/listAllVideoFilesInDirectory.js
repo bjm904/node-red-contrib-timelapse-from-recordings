@@ -3,8 +3,6 @@ const glob = require('glob');
 // This object will also hold caching information added to it by glob
 const globOptions = {
   nodir: true,
-  //nosort: true,
-  //stat: true,
 };
 
 const listAllVideoFilesInDirectory = (directory) => new Promise((resolve, reject) => {

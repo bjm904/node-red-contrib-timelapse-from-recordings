@@ -15,14 +15,14 @@ const processNextRecording = (node, tmpCamDirectory, fileInfos, resolveCamera, i
   }
 };
 
-const startProcessingThread = (node, tmpCamDirectory, fileInfos = []) => new Promise((resolve, reject) => {
+const startProcessingThread = (node, tmpCamDirectory, fileInfos = []) => new Promise((resolve) => {
   processNextRecording(node, tmpCamDirectory, fileInfos, resolve, 0);
 });
 
-const extractFramesForCamera = (node, tmpDirectory, threadsPerCamera, camera, fileInfos = []) => new Promise((resolve, reject) => {
+const extractFramesForCamera = (node, tmpDirectory, threadsPerCamera, camera, fileInfos = []) => new Promise((resolve) => {
   const tmpCamDirectory = path.join(tmpDirectory, camera);
   node.debug(`Creating tmpCamDirectory ${tmpCamDirectory}`);
-  fs.mkdirSync(tmpCamDirectory, {recursive: true});
+  fs.mkdirSync(tmpCamDirectory, { recursive: true });
 
   const fileInfosPerThread = Math.ceil(fileInfos.length / threadsPerCamera);
 

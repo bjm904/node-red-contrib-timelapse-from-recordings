@@ -1,9 +1,7 @@
+const { spawn } = require('child_process');
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
 const fs = require('fs');
 const path = require('path');
-const spawn = require('child_process').spawn;
-
-const secsBetweenFrames = 1 * 60 * 60; // 1 hr
 
 const extractFramesFromRecording = (node, tmpCamDirectory, fileInfo) => new Promise((resolve, reject) => {
   const inputPath = `${fileInfo.fileName}`;
@@ -29,6 +27,7 @@ const extractFramesFromRecording = (node, tmpCamDirectory, fileInfo) => new Prom
 
   ffmpeg.on('exit', (code) => {
     if (code === 0) {
+      // eslint-disable-next-line no-param-reassign
       fileInfo.done = true;
       resolve();
     } else {
@@ -36,20 +35,19 @@ const extractFramesFromRecording = (node, tmpCamDirectory, fileInfo) => new Prom
         // Delete any potentially corrupt output
         fs.unlinkSync(outputPath, { force: true });
       } catch (err) {
+        node.debug(err);
       }
-      reject(`ffmpeg exited with code ${code}`);
+      reject(new Error(`ffmpeg exited with code ${code}`));
     }
   });
 
-  if (false) {
-    ffmpeg.stdout.on('data', (data) => {
-      node.warn(`${data}`);
-    });
+  ffmpeg.stdout.on('data', (data) => {
+    node.debug(`${data}`);
+  });
 
-    ffmpeg.stderr.on('data', (data) => {
-      node.warn(`${data}`);
-    });
-  }
+  ffmpeg.stderr.on('data', (data) => {
+    node.debug(`${data}`);
+  });
 });
 
 module.exports = extractFramesFromRecording;

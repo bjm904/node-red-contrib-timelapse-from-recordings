@@ -1,4 +1,4 @@
-const interpretFileInfoFromPath = (fileName) =>  {
+const interpretFileInfoFromPath = (fileName) => {
   const nameArray = fileName.split('/');
   const nameArrayReversed = nameArray.reverse();
   /*
