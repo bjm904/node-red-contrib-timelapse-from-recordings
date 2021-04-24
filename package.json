@@ -16,6 +16,7 @@
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.20",
     "ffmpeg": "0.0.4",
+    "find-closest": "^7.0.1",
     "glob": "^7.1.6",
     "rimraf": "^3.0.2"
   },
@@ -28,5 +29,10 @@
     "nodes": {
       "timelapse-from-recordings": "src/timelapse-from-recordings.js"
     }
+  },
+  "devDependencies": {
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1"
   }
 }
