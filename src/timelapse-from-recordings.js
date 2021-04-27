@@ -13,6 +13,19 @@ module.exports = function TimelapseFromRecordingsNodeModule(RED) {
   function TimelapseFromRecordingsNode(config) {
     RED.nodes.createNode(this, config);
     const node = this;
+    this.nodeConfig = {
+      recordings_directory: config['recordings-directory'] || null,
+      output_directory: config['output-directory'] || null,
+      camera_name: config['camera-name'] || null,
+      time_start: config['time-start'] || null,
+      time_end: config['time-end'] || null,
+      time_previous_hours: config['time-previous-hours'] || null,
+      output_target_duration_secs: config['output-duration'] || null,
+      output_framerate: config['output-framerate'] || null,
+      output_width: config['output-width'] || null,
+      output_height: config['output-height'] || null,
+      cpu_threads: config['cpu-threads'] || null,
+    };
 
     const tmpDirectory = path.join(os.tmpdir(), 'timelapse-from-recordings');
 
@@ -24,17 +37,17 @@ module.exports = function TimelapseFromRecordingsNodeModule(RED) {
 
     node.on('input', (msg, send, done) => {
       const {
-        cpu_threads = 4,
-        camera_name = '*',
-        recordings_directory,
-        output_directory,
-        time_previous_hours = 24,
-        time_start = null,
-        time_end = null,
-        output_target_duration_secs = 30,
-        output_width = -1,
-        output_height = -1,
-        output_framerate = 30,
+        recordings_directory = this.nodeConfig.recordings_directory || null,
+        output_directory = this.nodeConfig.output_directory || null,
+        camera_name = this.nodeConfig.camera_name || '*',
+        time_start = this.nodeConfig.time_start || null,
+        time_end = this.nodeConfig.time_end || null,
+        time_previous_hours = this.nodeConfig.time_previous_hours || 24,
+        output_target_duration_secs = this.nodeConfig.output_target_duration_secs || 30,
+        output_framerate = this.nodeConfig.output_framerate || 30,
+        output_width = this.nodeConfig.output_width || -1,
+        output_height = this.nodeConfig.output_height || -1,
+        cpu_threads = this.nodeConfig.cpu_threads || 4,
       } = msg;
 
       if (!recordings_directory) {

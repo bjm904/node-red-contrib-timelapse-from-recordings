@@ -1,11 +1,44 @@
 <script type="text/javascript">
   RED.nodes.registerType('timelapse-from-recordings', {
     category: 'function',
-    color: '#a8328b',
+    color: '#c43ba3',
     icon: 'font-awesome/fa-film',
     defaults: {
       name: {
         value: 'Timelapse',
+      },
+      'recordings-directory': {
+        value: '',
+      },
+      'output-directory': {
+        value: '',
+      },
+      'camera-name': {
+        value: '*',
+      },
+      'time-start': {
+        value: '',
+      },
+      'time-end': {
+        value: '',
+      },
+      'time-previous-hours': {
+        value: 24,
+      },
+      'output-duration': {
+        value: 30,
+      },
+      'output-framerate': {
+        value: 30,
+      },
+      'output-width': {
+        value: "",
+      },
+      'output-height': {
+        value: "",
+      },
+      'cpu-threads': {
+        value: 4,
       },
     },
     inputs: 1,
@@ -20,16 +53,122 @@
   <div class="form-row">
     <label for="node-input-name">
       <i class="fa fa-tag"></i>
-      Name
+      Node Name
     </label>
     <input type="text" id="node-input-name" placeholder="Name" />
   </div>
+  <h2>
+    The following settings can be overridden by corresponding key on input msg object.
+  </h2>
   <div class="form-row">
-    <label for="node-input-name">
-      <i class="fa fa-tag"></i>
+    <label for="node-input-recordings-directory">
+      <i class="fa fa-folder-o"></i>
       Recordings Directory
     </label>
     <input type="text" id="node-input-recordings-directory" placeholder="/frigate/recordings" />
+    <div class="form-tips">
+      <b>Tip:</b> Directory to scan recursively for video recordings to create timelapse
+    </div>
+  </div>
+  <div class="form-row">
+    <label for="node-input-output-directory">
+      <i class="fa fa-folder-o"></i>
+      Output Directory
+    </label>
+    <input type="text" id="node-input-output-directory" placeholder="/frigate/timelapses" />
+    <div class="form-tips">
+      <b>Tip:</b> Directory to place completed timelapses. Will be created if doesn't exist
+    </div>
+  </div>
+  <div class="form-row">
+    <label for="node-input-camera-name">
+      <i class="fa fa-tag"></i>
+      Camera(s) Name (Glob Pattern)
+    </label>
+    <input type="text" id="node-input-camera-name" placeholder="*" />
+    <div class="form-tips">
+      <b>Tip:</b> Glob pattern to match camera name(s). Use * for all or you can specify a single camera name here
+    </div>
+  </div>
+  <div class="form-row">
+    <label for="node-input-time-previous-hours">
+      <i class="fa fa-tag"></i>
+      Generate for Last x Hours
+    </label>
+    <input type="number" id="node-input-time-previous-hours" placeholder="24" />
+    <div class="form-tips">
+      <b>Tip:</b> Number of hours ago to start the timelapse. (Use this or Start Time &amp; End Time)
+    </div>
+  </div>
+  <div class="form-row">
+    <label for="node-input-time-start">
+      <i class="fa fa-calendar-times-o"></i>
+      Generate using Start Time
+    </label>
+    <input type="datetime" id="node-input-time-start" placeholder="" />
+    <div class="form-tips">
+      <b>Tip:</b> Date and Time to begin the timelapse. (Use this &amp; End Time or Generate for Last x Hours)
+    </div>
+  </div>
+  <div class="form-row">
+    <label for="node-input-time-end">
+      <i class="fa fa-calendar-times-o"></i>
+      Generate using End Time
+    </label>
+    <input type="datetime" id="node-input-time-end" placeholder="" />
+    <div class="form-tips">
+      <b>Tip:</b> Date and Time to end the timelapse. (Use this &amp; Start Time or Generate for Last x Hours)
+    </div>
+  </div>
+  <div class="form-row">
+    <label for="node-input-output-duration">
+      <i class="fa fa-wrench"></i>
+      Output Target Duration
+    </label>
+    <input type="number" id="node-input-output-duration" placeholder="30" />
+    <div class="form-tips">
+      <b>Tip:</b> Seconds of length for timelapse output
+    </div>
+  </div>
+  <div class="form-row">
+    <label for="node-input-output-framerate">
+      <i class="fa fa-wrench"></i>
+      Output Framerate
+    </label>
+    <input type="number" id="node-input-output-framerate" placeholder="30" />
+    <div class="form-tips">
+      <b>Tip:</b> Framerate of timelapse output
+    </div>
+  </div>
+  <div class="form-row">
+    <label for="node-input-output-width">
+      <i class="fa fa-arrows-h"></i>
+      Output Width Override
+    </label>
+    <input type="number" id="node-input-output-width" placeholder="" />
+    <div class="form-tips">
+      <b>Tip:</b> Output timelapse width. Leave blank to use same dimensions as input
+    </div>
+  </div>
+  <div class="form-row">
+    <label for="node-input-output-height">
+      <i class="fa fa-arrows-v"></i>
+      Output Height Override
+    </label>
+    <input type="number" id="node-input-output-height" placeholder="" />
+    <div class="form-tips">
+      <b>Tip:</b> Output timelapse height. Leave blank to use same dimensions as input
+    </div>
+  </div>
+  <div class="form-row">
+    <label for="node-input-cpu-threads">
+      <i class="fa fa-tasks"></i>
+      CPU Threads
+    </label>
+    <input type="number" id="node-input-cpu-threads" placeholder="4" />
+    <div class="form-tips">
+      <b>Tip:</b> Maximum number of threads to use. Program uses this or fewer threads, feel free to overshoot a little
+    </div>
   </div>
 </script>
 
