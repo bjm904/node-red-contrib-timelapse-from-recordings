@@ -1,9 +1,9 @@
 # Node Red Timelapse from Recordings for Frigate
 
-This node will scan a directory of video files and produce a timelapse GIF based on parameters. Each video file is one frame of the timelapse.
+This node will scan a directory of video files and produce a timelapse video based on parameters. Each video file is one frame of the timelapse.
 
 
-To be used alongside **Frigate&apos;s** 24/7 recording to dynamically produce timelapse GIFs from recordings.
+To be used alongside **Frigate&apos;s** 24/7 recording to dynamically produce timelapse videos from recordings.
 https://github.com/blakeblackshear/frigate
 
 Properties on msg object will override the configuration on the node itself. Defaults are shown below next to applicable property names.
@@ -29,3 +29,4 @@ Outputs H.264 to `/output_directory/camera_name.mp4`
 - Add ability to specify file extentions to filter like .mp4 or .mkv
 - Add ability to create non-continuous timelapses. Example: "Noon every day for last 30 days"
 - Add better filtering out of corrupt videos / frames
+- Make work for non-Frigate recording directory structure
