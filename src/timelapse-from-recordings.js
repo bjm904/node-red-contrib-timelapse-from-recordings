@@ -209,7 +209,6 @@ module.exports = function TimelapseFromRecordingsNodeModule(RED) {
               text: 'Done',
             });
             send(msg);
-            done();
           });
         });
       }).catch((err) => {
