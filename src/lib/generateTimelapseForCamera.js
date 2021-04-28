@@ -32,7 +32,7 @@ const generateTimelapseForCamera = (node, tmpDirectory, threadsPerCamera, camera
   const ffmpegVideo = spawn(ffmpegPath, ffmpegVideoArgs);
 
   ffmpegVideo.on('error', (err) => {
-    node.warn(err);
+    node.debug(err);
   });
 
   ffmpegVideo.stdout.on('data', (data) => {

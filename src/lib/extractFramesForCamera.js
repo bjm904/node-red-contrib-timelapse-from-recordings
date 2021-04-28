@@ -6,7 +6,7 @@ const processNextRecording = (node, tmpCamDirectory, fileInfos, resolveCamera, i
   const fileInfo = fileInfos[i];
   if (fileInfo) {
     extractFramesFromRecording(node, tmpCamDirectory, fileInfo).catch((err) => {
-      node.warn(err);
+      node.debug(err);
     }).finally(() => {
       processNextRecording(node, tmpCamDirectory, fileInfos, resolveCamera, i + 1);
     });

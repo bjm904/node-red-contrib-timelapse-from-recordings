@@ -13,6 +13,7 @@ module.exports = function TimelapseFromRecordingsNodeModule(RED) {
   function TimelapseFromRecordingsNode(config) {
     RED.nodes.createNode(this, config);
     const node = this;
+
     this.nodeConfig = {
       recordings_directory: config['recordings-directory'] || null,
       output_directory: config['output-directory'] || null,
@@ -96,7 +97,7 @@ module.exports = function TimelapseFromRecordingsNodeModule(RED) {
         let endTimestamp = time_end;
 
         if (!startTimestamp || !endTimestamp) {
-          node.warn(`Missing time_start or time_end. Calculating with time_previous_hours ${time_previous_hours} hrs`);
+          node.debug(`Missing time_start or time_end. Calculating with time_previous_hours ${time_previous_hours} hrs`);
           endTimestamp = Date.now();
           startTimestamp = endTimestamp - (time_previous_hours * 60 * 60 * 1000);
         }
